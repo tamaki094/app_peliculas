@@ -8,7 +8,6 @@ class HomeScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     //ve la arbol de widgets, y taeme la isntancia de moviesProvider
     final moviesProvider = Provider.of<MoviesProvider>(context, listen: true);
-    print(moviesProvider.onDisplayMovies);
 
     return Scaffold(
         appBar: AppBar(

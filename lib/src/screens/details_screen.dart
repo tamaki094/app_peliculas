@@ -7,15 +7,16 @@ class DetailsScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     final Movie movie = ModalRoute.of(context).settings.arguments as Movie;
 
-    print(movie.title);
-
     return Scaffold(
       body: CustomScrollView(
         slivers: [
           _CustomAppBar(movie),
           SliverList(
-              delegate: SliverChildListDelegate(
-                  [_PosterAndTitle(movie), _OverView(movie), CastingCards()]))
+              delegate: SliverChildListDelegate([
+            _PosterAndTitle(movie),
+            _OverView(movie),
+            CastingCards(movie.id)
+          ]))
         ],
       ),
     );

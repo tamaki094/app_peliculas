@@ -11,18 +11,25 @@ class MoviesProvider extends ChangeNotifier {
   List<Movie> onDisplayMovies = [];
   List<Movie> popularMovies = [];
 
+  Map<int, List<Cast>> moviesCast = {};
+
   int _popularPage = 0;
 
   MoviesProvider() {
-    print('MoviesProvider inicializado');
-
     this.getOnDisplayMovies();
     this.getPopularMovies();
   }
 
   _getJsonData(String endpoint, [int page]) async {
-    var url = Uri.https(_baseUrl, endpoint,
-        {'api_key': _apiKey, 'language': _language, 'page': "$page"});
+    var url;
+    if (page != null) {
+      url = Uri.https(_baseUrl, endpoint,
+          {'api_key': _apiKey, 'language': _language, 'page': "$page"});
+    } else {
+      url = Uri.https(
+          _baseUrl, endpoint, {'api_key': _apiKey, 'language': _language});
+    }
+    print(url);
     final response = await http.get(url);
     return response.body;
   }
@@ -42,7 +49,18 @@ class MoviesProvider extends ChangeNotifier {
     final popularResponse = PopularResponse.fromJson(jsonData);
 
     popularMovies = [...popularMovies, ...popularResponse.results];
-    print(popularMovies[0]);
     notifyListeners();
+  }
+
+  Future<List<Cast>> getMovieCast(int movieId) async {
+    if (moviesCast.containsKey(movieId)) return moviesCast[movieId];
+    print('pididendo info al servidor - Cast');
+
+    final jsonData = await this._getJsonData('3/movie/$movieId/credits');
+    final creditResponse = CreditsResponse.fromJson(jsonData);
+
+    moviesCast[movieId] = creditResponse.cast;
+
+    return creditResponse.cast;
   }
 }
