@@ -33,6 +33,8 @@ class Movie {
   double voteAverage;
   int voteCount;
 
+  String heroId;
+
   get fullPosterImg {
     if (this.posterPath == null)
       return 'https://plantillasdememes.com/img/plantillas/imagen-no-disponible01601774755.jpg';
